@@ -96,6 +96,17 @@ fun MovieDetail(movie: Autism) {
                 text = movie.name
             )
            //text
+            Spacer(Modifier.size(10.dp))
+            Text(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight()
+                    .padding(start = 10.dp),
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                text = "Description: ")
+
+            Spacer(Modifier.size(10.dp))
+            Spacer(Modifier.size(10.dp))
             val aware = ""
             Button(
                 modifier = Modifier
