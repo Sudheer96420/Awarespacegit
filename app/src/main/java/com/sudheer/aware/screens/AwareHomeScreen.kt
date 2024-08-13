@@ -131,6 +131,70 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                 val context = LocalContext.current
 
 //                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(16.dp)) // Optional spacer for spacing below the image
+
+                Image(
+                    painterResource(id = R.drawable.a1),
+                    modifier = Modifier
+                        .clickable {
+                            context.startActivity(
+                                Intent(context, LetterAndWordActivity::class.java))
+                        }
+                        .width(990.dp)
+                        .height(190.dp),
+                    contentDescription = "",
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .wrapContentHeight()
+
+                        .padding(start = 10.dp),
+                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                    text = "Letters and Words"
+                )
+                Spacer(Modifier.size(40.dp))
+
+                Image(
+                    painterResource(id = R.drawable.a2),
+                    modifier = Modifier
+                        .clickable {
+                            context.startActivity(
+                                Intent(context, FunfruitActivity::class.java))
+                        }
+                        .width(990.dp)
+                        .height(190.dp),
+                    contentDescription = "",
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .wrapContentHeight()
+                        .padding(start = 10.dp),
+                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                    text = "Fruits Count"
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                Text(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .wrapContentHeight()
+                        .clickable {
+                            context.startActivity(
+                                Intent(context, AddtoCartActivity::class.java))
+                        }
+                        .padding(start = 10.dp),
+                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                    text = "Get Subscription"
+                )
+
+
+
+
 
 //                GenreTitle(genreTitle = "Select Types")
                 //imageprof
