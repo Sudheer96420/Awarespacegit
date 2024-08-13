@@ -134,6 +134,25 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
 
 //                GenreTitle(genreTitle = "Select Types")
                 //imageprof
+                Image(
+                    painter = painterResource(id = R.drawable.prof),
+                    contentDescription = "Profile Info",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(90.dp)
+                        .height(100.dp)
+
+                        .offset(x = 140.dp, y = (-10).dp)
+                        .clickable {
+                            context.startActivity(
+                                Intent(context, ProfileActivity::class.java)
+                            )
+                        }
+                        .padding(start = 10.dp)
+                )
+
+
+
 
                 // Add more content here if needed
 
