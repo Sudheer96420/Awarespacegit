@@ -73,6 +73,68 @@ fun ChoiceQuantity() {
 @Composable
 fun MovieDetail(movie: Autism) {
 //detail
+    val context = LocalContext.current
+
+    LazyColumn(content = {
+        item {
+            Spacer(Modifier.size(30.dp))
+            Image(
+                painterResource(id = movie.poster),
+                modifier = Modifier
+                    .width(400.dp)
+                    .height(100.dp),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                alignment = Alignment.Center)
+            Spacer(Modifier.size(20.dp))
+            Text(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight()
+                    .padding(start = 10.dp),
+                style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.Bold),
+                text = movie.name
+            )
+           //text
+            val aware = ""
+            Button(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .heightIn(48.dp),
+                onClick = {
+                    context.startActivity(
+                        Intent(context, AddtoCartActivity::class.java)
+                            .putExtra("aware_data", aware))
+                },
+                contentPadding = PaddingValues(),
+                colors = ButtonDefaults.buttonColors(Color.Transparent),
+                shape = RoundedCornerShape(50.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(48.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(listOf(Primary, Primary)),
+                            shape = RoundedCornerShape(20.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Get Subscription",
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold)
+                }
+
+
+
+
+
+            }
+        }
+    })
+
+
 
 }
 
