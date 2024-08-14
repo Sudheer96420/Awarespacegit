@@ -60,8 +60,85 @@ class FunfruitActivity : ComponentActivity() {
 fun Greeting2(name: String, modifier: Modifier = Modifier) {
 
 
-       //ff
+
+    Image(
+        painterResource(id = R.drawable.fc),
+        modifier = Modifier
+            .fillMaxSize(),
+        contentDescription = "",
+        contentScale = ContentScale.Fit,
+        alignment = Alignment.Center
+    )
+
+
+    val gradient45 = Brush.linearGradient(
+        colors = listOf(Color.White, Color.Green),
+        start = Offset(0f, Float.POSITIVE_INFINITY),
+        end = Offset(Float.POSITIVE_INFINITY, 0f)
+    )
+
+    Surface(
+        modifier = Modifier
+            .background(gradient45)
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .background(gradient45),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            val context = LocalContext.current
+            Image(
+                painterResource(id = R.drawable.fc),
+                modifier = Modifier
+                    .requiredHeight(500.dp),
+                contentDescription = "",
+                contentScale = ContentScale.Fit
+            )
+
+
+            Button(
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .padding(end = 20.dp)
+                    .fillMaxWidth()
+                    .heightIn(48.dp),
+                onClick = {
+                    context.startActivity(Intent(context, AddtoCartActivity::class.java))
+                },
+                contentPadding = PaddingValues(),
+                colors = ButtonDefaults.buttonColors(Color.Transparent),
+                shape = RoundedCornerShape(30.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(48.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(listOf(Primary, Primary)),
+                            shape = RoundedCornerShape(50.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Get Subscription",
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                }
+
+            }
+
+
+
+        }
     }
+
+
+}
 
 @Preview(showBackground = true)
 @Composable
