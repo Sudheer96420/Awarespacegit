@@ -56,7 +56,94 @@ class LetterAndWordActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    //law
+    Image(
+        painterResource(id = R.drawable.law),
+
+
+
+        contentDescription = "",
+
+        contentScale = ContentScale.Fit,
+        modifier = Modifier
+            .fillMaxSize(),
+
+        alignment = Alignment.Center)
+
+
+
+    val gradient45 = Brush.linearGradient(
+        colors = listOf(Color.White, Color.Green),
+        start = Offset(0f, Float.POSITIVE_INFINITY),
+        end = Offset(Float.POSITIVE_INFINITY, 0f)
+    )
+
+    Surface(
+        modifier = Modifier
+            .background(gradient45)
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .background(gradient45),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            val context = LocalContext.current
+            Image(
+                painter = painterResource(id = R.drawable.law),
+                modifier = Modifier
+                    .requiredHeight(500.dp)  // Increased height
+                    .requiredWidth(500.dp),  // Added width
+
+                contentDescription = null,
+                contentScale = ContentScale.Fit
+            )
+
+
+
+            Button(
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .padding(end = 20.dp)
+                    .fillMaxWidth()
+                    .heightIn(48.dp),
+                onClick = {
+                    context.startActivity(Intent(context, AddtoCartActivity::class.java))
+                },
+                contentPadding = PaddingValues(),
+                colors = ButtonDefaults.buttonColors(Color.Transparent),
+                shape = RoundedCornerShape(30.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(48.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(listOf(Primary, Primary)),
+                            shape = RoundedCornerShape(50.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Get Subscription",
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                }
+
+            }
+
+//            ButtonComponent(
+//                value = "Get Subscriptions",
+//                onButtonClicked = {
+//                    context.startActivity(Intent(context, AddtoCartActivity::class.java))
+//                })
+
+        }
+    }
+
 
 }
 
