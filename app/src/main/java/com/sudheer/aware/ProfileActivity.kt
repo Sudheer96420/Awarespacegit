@@ -55,6 +55,193 @@ class ProfileActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     //profile
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val cameraPermissionStatusState = mutableStateOf(CameraPermissionStatus.NoPermission)
+        val photoUriState: MutableState<Uri?> = mutableStateOf(null)
+        val hasPhotoState = mutableStateOf(value = false)
+        val resolver = applicationContext.contentResolver
+
+        val requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                if (isGranted) {
+                    cameraPermissionStatusState.value = CameraPermissionStatus.PermissionGranted
+                } else {
+                    cameraPermissionStatusState.value = CameraPermissionStatus.PermissionDenied
+                }
+            }
+
+        val takePhotoLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { isSaved ->
+                hasPhotoState.value = isSaved
+            }
+
+        val takePhoto: () -> Unit = {
+            hasPhotoState.value = false
+
+            val values = ContentValues().apply {
+                val title = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+                put(MediaStore.Images.Media.TITLE, "Compose Camera Example Image - $title")
+                put(MediaStore.Images.Media.DISPLAY_NAME, title)
+                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+            }
+
+            val uri = resolver.insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                values
+            )
+            takePhotoLauncher.launch(uri)
+            photoUriState.value = uri
+        }
+
+        // Ideally these would be cached instead of reloaded
+        val getThumbnail: (Uri?) -> ImageBitmap? = { uri ->
+            val targetSize = 256f
+            println("URI is $uri")
+            uri?.let {
+                println("Opening Input Stream")
+                resolver.openInputStream(it)
+            }?.let {
+                BitmapFactory.decodeStream(it)
+            }?.let {
+                val height = it.height.toFloat()
+                val width = it.width.toFloat()
+                val scaleFactor = min(targetSize / height, targetSize / width)
+                Bitmap.createScaledBitmap(it, (scaleFactor * width).toInt(), (scaleFactor * height).toInt(), true)
+            }?.let {
+                val rotation = getImageRotation(resolver, uri)
+                Bitmap.createBitmap(it, 0, 0, it.width, it.height, Matrix().apply { postRotate(rotation.toFloat()) }, true)
+            }?.asImageBitmap()
+        }
+
+        val getFullImage: (Uri?) -> ImageBitmap? = { uri ->
+            uri?.let {
+                resolver.openInputStream(it)
+            }?.let {
+                BitmapFactory.decodeStream(it)
+            }?.let {
+                val rotation = getImageRotation(resolver, uri)
+                Bitmap.createBitmap(it, 0, 0, it.width, it.height, Matrix().apply { postRotate(rotation.toFloat()) }, true)
+            }?.asImageBitmap()
+        }
+
+        setContent {
+            val cameraPermissionStatus by remember { cameraPermissionStatusState }
+            val hasPhoto by remember { hasPhotoState }
+            var shouldShowFullImage by remember { mutableStateOf(false) }
+            var isEditing by remember { mutableStateOf(false) }
+
+            val nameState = remember { mutableStateOf("Sudheer") }
+            val emailState = remember { mutableStateOf("s@gmail.com") }
+            val locationState = remember { mutableStateOf("Middlesbrough") }
+
+            AutismAppTheme {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFFEDEDED))) { // Light background color
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp), // Add padding if needed
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        if (isEditing) {
+                            OutlinedTextField(
+                                value = nameState.value,
+                                onValueChange = { nameState.value = it },
+                                label = { Text("Name") }
+                            )
+                            OutlinedTextField(
+                                value = emailState.value,
+                                onValueChange = { emailState.value = it },
+                                label = { Text("Email") }
+                            )
+                            OutlinedTextField(
+                                value = locationState.value,
+                                onValueChange = { locationState.value = it },
+                                label = { Text("Location") }
+                            )
+                        } else {
+                            HeadingTextComponent(value = "Name: ${nameState.value}")
+                            HeadingTextComponent(value = "Email: ${emailState.value}")
+                            HeadingTextComponent(value = "Location: ${locationState.value}")
+                        }
+
+                        TakePhotoButton(
+                            cameraPermissionStatus = cameraPermissionStatus,
+                            requestPermissionLauncher = requestPermissionLauncher,
+                            takePhoto = takePhoto
+                        )
+                        if (hasPhoto) {
+                            val bitmap = getThumbnail(photoUriState.value)
+                            println("Is bitmap null: $bitmap")
+                            if (bitmap != null) {
+                                Image(
+                                    bitmap = bitmap,
+                                    contentDescription = "Thumbnail of Saved Photo",
+                                    modifier = Modifier.clickable {
+                                        shouldShowFullImage = true
+                                    }
+                                )
+                            }
+                        }
+
+                        SaveButton {
+                            // Implement save functionality here
+                            isEditing = false
+                        }
+
+                        EditButton {
+                            // Implement edit functionality here
+                            isEditing = true
+                        }
+
+                        BackButton {
+                            finish() // This will close the activity and go back to the previous screen
+                        }
+                    }
+
+                    if (shouldShowFullImage && hasPhoto) {
+                        val bitmap = getFullImage(photoUriState.value)
+                        if (bitmap != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clickable {
+                                        shouldShowFullImage = false
+                                    }
+                            ) {
+                                Image(
+                                    bitmap = bitmap,
+                                    contentDescription = "Full image of Saved Photo",
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                                Surface(
+                                    modifier = Modifier
+                                        .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+                                        .align(Alignment.Center)
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        text = "Click to Close",
+                                        style = androidx.compose.material3.MaterialTheme.typography.headlineMedium.copy(
+                                            fontWeight = FontWeight.ExtraBold
+                                        )
+                                    )
+                                }
+                            }
+                        } else {
+                            shouldShowFullImage = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun getImageRotation(resolver: ContentResolver, uri: Uri): Int {
         val cursor = resolver.query(

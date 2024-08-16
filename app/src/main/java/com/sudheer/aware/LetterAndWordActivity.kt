@@ -135,11 +135,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
             }
 
-//            ButtonComponent(
-//                value = "Get Subscriptions",
-//                onButtonClicked = {
-//                    context.startActivity(Intent(context, AddtoCartActivity::class.java))
-//                })
+
 
         }
     }
