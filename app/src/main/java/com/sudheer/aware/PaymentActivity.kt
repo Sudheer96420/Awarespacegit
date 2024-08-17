@@ -72,6 +72,38 @@ class AddtoCartActivity : ComponentActivity() {
 
 //tf
 
+                    MyTextFieldComponent(
+                        labelValue = "Bank Name",
+                        painterResource(id = R.drawable.card_png1),
+                        onTextChanged = {
+
+                        },
+                    )
+
+                    MyTextFieldComponent(
+                        labelValue = "Card Number",
+                        painterResource(id = R.drawable.card_png1),
+                        onTextChanged = {
+
+                        },
+                    )
+
+                    MyTextFieldComponent(
+                        labelValue = "Sort Code",
+                        painterResource = painterResource(id = R.drawable.card_png1),
+                        onTextChanged = {
+
+                        },
+                    )
+
+                    MyTextFieldComponent(
+                        labelValue = " 3 digits Cvv Number ",
+                        painterResource = painterResource(id = R.drawable.card_png1),
+                        onTextChanged = {
+
+                        },
+                    )
+
                     Spacer(modifier = Modifier.height(20.dp))
                     val toy = ""
                     Button(
