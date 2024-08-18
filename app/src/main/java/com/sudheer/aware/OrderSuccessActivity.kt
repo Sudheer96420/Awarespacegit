@@ -38,6 +38,72 @@ import com.sudheer.aware.ui.theme.Primary
 
 
 class OrderSuccessActivity : ComponentActivity() {
+    @SuppressLint("SuspiciousIndentation")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+
+            val context = LocalContext.current
+            val gradient45 = Brush.linearGradient(
+                colors = listOf(Color.White, Color.Green),
+                start = Offset(0f, Float.POSITIVE_INFINITY),
+                end = Offset(Float.POSITIVE_INFINITY, 0f)
+            )
+
+            Surface(
+                modifier = Modifier
+                    .background(gradient45)
+                    .fillMaxSize()
+                    .padding(28.dp)
+            ) {
+
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .background(gradient45),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    HeadingTextComponent(value = "Subscription Successfully Completed")
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Image(painter = painterResource(id = R.drawable.order_sucess_img),contentDescription = null)
+                    Spacer(modifier = Modifier.height(105.dp))
+                    val aware = ""
+                    Button(
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .heightIn(48.dp),
+                        onClick = {
+//                          Toast.makeText(context, "Place Order", Toast.LENGTH_SHORT).show()
+                            context.startActivity(Intent(context, MainActivity::class.java)
+                                .putExtra("aware", aware))
+                        },
+                        contentPadding = PaddingValues(),
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        shape = RoundedCornerShape(50.dp),
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(48.dp)
+                                .background(
+                                    brush = Brush.horizontalGradient(listOf(Primary, Primary)),
+                                    shape = RoundedCornerShape(20.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Back to Home",
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
 
 }
 
